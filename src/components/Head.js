@@ -12,7 +12,7 @@ const Head = () => {
     dispatch(toggleMenu());
   };
   return (
-    <div className="grid-flow-col grid m-3 shadow-lg">
+    <div className="grid-flow-col grid m-3 shadow-lg ">
       <div className=" grid-span-1 p-1 flex items-center  ">
         <MenuIcon
           onClick={toggleMenuHandler}

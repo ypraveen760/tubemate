@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { YOUTUBE_VIDEO_API } from "./utils/constrans";
 import Shimmer from "./Shimmer";
 import VideoCards from "./VideoCards";
+import { useDispatch } from "react-redux";
 
 const VideoContainer = () => {
   const [video, SetVideo] = useState([]);
   useEffect(() => {
     getVideos();
   }, []);
-  console.log(video);
 
   const getVideos = async () => {
     try {
