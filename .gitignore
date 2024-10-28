@@ -22,5 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
-constrans.js
+# Ignore a specific file
+*.utils
+src/components/utils/constrans.js
