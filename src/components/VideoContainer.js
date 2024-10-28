@@ -25,7 +25,7 @@ const VideoContainer = () => {
   return video.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap fixed h-[87vh] md:top-24 -z-20  no-scrollbar overflow-y-scroll ">
       {video.map((val) => (
         <Link to={"/watch?v=" + val.id} key={val.id}>
           <VideoCards info={val} />

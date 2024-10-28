@@ -21,8 +21,8 @@ const SideBar = () => {
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   if (!isMenuOpen) return null;
   return (
-    <div>
-      <div className="p-2 ml-4 shadow-lg w-44 *:text-lg border-b-2  ">
+    <div className="fixed bg-white top-16 md:top-24 h-[77vh] md:h-[83vh] z-10 lg:h-[95vh] no-scrollbar overflow-y-auto ">
+      <div className="p-2 ml-4 shadow-2xl w-44 *:text-lg border-b-2 bg-white rounded-r-lg  ">
         <ul className="flex flex-col gap-3 ">
           <li className="hover:text-gray-500 cursor-pointer">
             <Link to="/">
@@ -67,7 +67,7 @@ const SideBar = () => {
             <NewspaperRoundedIcon className="hover:text-red-600" /> News
           </li>
         </ul>
-        <ul className="flex flex-col gap-3 mt-3 ">
+        <ul className="lg:flex flex-col gap-3 mt-3 hidden ">
           <li className="hover:text-gray-500 cursor-pointer">
             <ManageAccountsRoundedIcon className="hover:text-red-600" />{" "}
             Settings
