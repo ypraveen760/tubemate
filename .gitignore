@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # Ignore a specific file
-
+*.utils
 src/components/utils/constrans.js

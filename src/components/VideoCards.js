@@ -4,7 +4,7 @@ const VideoCards = ({ info }) => {
   const { snippet, statistics } = info;
   const { channelTitle, title, thumbnails, publishedAt } = snippet;
 
-  const { viewCount } = statistics;
+  const viewCount = statistics?.viewCount || 0;
 
   return (
     <div className="m-2 shadow-xl w-[340px] overflow-hidden h-[300px] rounded-xl p-1">
@@ -22,7 +22,11 @@ const VideoCards = ({ info }) => {
           </h1>
 
           <div className="flex items-center gap-2 text-sm font-light ">
-            {channelTitle} {(viewCount / 100000).toFixed(2)} lakh Views
+            {channelTitle}{" "}
+            {viewCount
+              ? `${(viewCount / 100000).toFixed(2)}
+            lakh Views`
+              : " "}
             <br /> uploded {publishedAt.slice(0, 10)}
           </div>
         </div>

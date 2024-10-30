@@ -7,12 +7,17 @@ import { useDispatch } from "react-redux";
 import { toggleMenu } from "./utils/appSlice";
 import { Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { PROXY_URL, YOUTUBE_SUGGESTION_API } from "./utils/constrans";
+import { YOUTUBE_SUGGESTION_API } from "./utils/constrans";
+import { useSelector } from "react-redux";
+import { clearData, setData } from "./utils/searchDataSlice";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestion, setSuggestion] = useState([]);
   const [showSuggestion, setShowSuggestion] = useState(false);
+
+  const searchKey = useSelector((store) => store.searchData);
 
   useEffect(() => {
     const event = setTimeout(() => {
@@ -22,6 +27,7 @@ const Head = () => {
       clearTimeout(event);
     };
   }, [searchQuery]);
+
   const fetchSearchQuery = async () => {
     try {
       const response = await fetch(YOUTUBE_SUGGESTION_API + searchQuery);
@@ -35,6 +41,18 @@ const Head = () => {
   const dispatch = useDispatch();
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
+  };
+  const handleClear = () => {
+    setSearchQuery("");
+  };
+  const handleSuggestionClick = (item) => {
+    console.log(item);
+
+    setSearchQuery(item);
+    dispatch(clearData());
+
+    dispatch(setData(item));
+    setShowSuggestion(false);
   };
   return (
     <div className="fixed bg-white w-full">
@@ -60,21 +78,32 @@ const Head = () => {
         </div>
         <div className="col-span-10   ">
           <div className="flex relative mt-1  md:mt-5 justify-center items-center ">
+            <SearchIcon className="relative left-8 text-gray-400" />
             <input
               placeholder="Search"
-              className="border border-gray-400 w-5/12 p-1 rounded-r-none rounded-l-2xl pl-4  "
+              className="border border-gray-400 w-5/12 p-1  rounded-r-none rounded-l-2xl pl-11  "
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSuggestion(true)}
-              onBlur={() => setShowSuggestion(false)}
+              onBlur={() => setTimeout(() => setShowSuggestion(false), 1000)}
             ></input>
 
             <div
               className="bg-gray-400 w-10 text-white p-1 text-center hover:bg-black cursor-pointer   rounded-r-2xl font-bold "
               fontSize="medium"
             >
-              <SearchIcon />
+              {searchQuery ? (
+                <Link to="/searchresult">
+                  <SearchIcon
+                    onClick={(e) => {
+                      handleSuggestionClick(searchQuery);
+                    }}
+                  />
+                </Link>
+              ) : (
+                <SearchIcon />
+              )}
             </div>
             <div
               className="bg-gray-400 w-10 text-white text-center p-1 hover:bg-black cursor-pointer border rounded-full ml-2 font-bold"
@@ -82,17 +111,28 @@ const Head = () => {
             >
               <MicNoneOutlinedIcon />
             </div>
+            {searchQuery && (
+              <ClearIcon
+                onClick={handleClear}
+                className="relative right-28 pr-2 text-gray-400 hover:text-red-600"
+              />
+            )}
           </div>
           <div className=" fixed bg-gray-50  md:ml-28 lg:ml-48 xl:ml-96  w-3/12 z-10 rounded-md overflow-x-hidden max-sm:w-8/12 shadow-xl ">
             {showSuggestion && (
               <ul className="sticky z-20">
                 {suggestion.map((item) => (
-                  <li
-                    className="py-2 px-2 rounded-lg  hover:shadow-sm hover:bg-gray-200"
-                    key={item}
-                  >
-                    <SearchIcon fontSize="small" /> {item}
-                  </li>
+                  <Link to="/searchresult">
+                    <li
+                      onClick={() => {
+                        handleSuggestionClick(item);
+                      }}
+                      className="py-2 px-2 rounded-lg  hover:shadow-sm cursor-pointer hover:bg-gray-200"
+                      key={item}
+                    >
+                      <SearchIcon fontSize="small" /> {item}
+                    </li>
+                  </Link>
                 ))}
               </ul>
             )}
