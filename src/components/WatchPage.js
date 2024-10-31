@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { closeMenu } from "./utils/appSlice";
-import { Link, useSearchParams } from "react-router-dom";
-import { GOOGLE_API_KEY, YOUTUBE_VIDEO_API } from "./utils/constrans";
+import { useSearchParams } from "react-router-dom";
+import { GOOGLE_API_KEY } from "./utils/constrans";
 import Shimmer from "./Shimmer";
 import ActionButtons from "./ActionButtons";
+import VideoCards from "./VideoCards";
 
 const WatchPage = () => {
   const dispatch = useDispatch();
   const [searchParam] = useSearchParams();
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState(null);
   const [recommendVideos, setRecommendVideos] = useState([]);
 
   const videoID = searchParam.get("v");
+  // const titleData = details?.snippet?.title || " ";
+  // const title = titleData ? titleData.slice(0, 15) : "";
 
   useEffect(() => {
     if (videoID) {
       dispatch(closeMenu());
       getVideos();
-      getRecommendVideos();
     }
   }, [videoID]);
 
@@ -30,19 +32,20 @@ const WatchPage = () => {
       if (!response.ok) throw new Error(`status:${response.status}`);
       const data = await response.json();
       setDetails(data.items[0]);
+      getRecommendVideos(data.items[0]?.snippet?.title);
     } catch (error) {
       console.log("Error occured While Fetching Videos" + error.message);
     }
   };
 
-  const getRecommendVideos = async () => {
-    if (!videoID) {
-      console.log("VIdeo id error");
-      return;
-    }
+  const getRecommendVideos = async (videoTitle) => {
+    const title = videoTitle.slice(0, 30);
+    console.log(title);
+
     try {
       const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${videoID}&type=video&key=${GOOGLE_API_KEY}&maxResults=10`
+        `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${title}&type=video&maxResults=30&regionCode=IN&key=` +
+          GOOGLE_API_KEY
       );
       if (!response.ok) throw new Error(`status:${response.status}`);
       const data = await response.json();
@@ -51,7 +54,7 @@ const WatchPage = () => {
       console.error("ERROR OCCURED " + err);
     }
   };
-  console.log(recommendVideos);
+  // console.log(recommendVideos);
 
   if (!details) {
     <Shimmer />;
@@ -73,7 +76,16 @@ const WatchPage = () => {
       <div className="hidden lg:flex lg:flex-col ">
         {" "}
         <div className="overflow-y-scroll h-[94vh] no-scrollbar scroll-smooth">
-          {/* VideoCards */}
+          {recommendVideos.length !== 0 ? (
+            recommendVideos.map((rec, index) => (
+              <VideoCards
+                info={rec}
+                key={rec.id.videoId ? rec.id.videoId : index}
+              />
+            ))
+          ) : (
+            <Shimmer />
+          )}
         </div>
       </div>
     </div>

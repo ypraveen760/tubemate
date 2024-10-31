@@ -8,7 +8,7 @@ import { toggleMenu } from "./utils/appSlice";
 import { Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { YOUTUBE_SUGGESTION_API } from "./utils/constrans";
-import { useSelector } from "react-redux";
+
 import { clearData, setData } from "./utils/searchDataSlice";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -16,8 +16,6 @@ const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestion, setSuggestion] = useState([]);
   const [showSuggestion, setShowSuggestion] = useState(false);
-
-  const searchKey = useSelector((store) => store.searchData);
 
   useEffect(() => {
     const event = setTimeout(() => {
@@ -122,13 +120,12 @@ const Head = () => {
             {showSuggestion && (
               <ul className="sticky z-20">
                 {suggestion.map((item) => (
-                  <Link to="/searchresult">
+                  <Link to="/searchresult" key={item}>
                     <li
                       onClick={() => {
                         handleSuggestionClick(item);
                       }}
                       className="py-2 px-2 rounded-lg  hover:shadow-sm cursor-pointer hover:bg-gray-200"
-                      key={item}
                     >
                       <SearchIcon fontSize="small" /> {item}
                     </li>
