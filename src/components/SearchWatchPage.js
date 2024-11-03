@@ -32,7 +32,7 @@ const SearchWatchPage = () => {
   };
 
   return searchResult.length === 0 ? (
-    <Shimmer />
+    <Shimmer className="flex flex-wrap" />
   ) : (
     <div className="absolute top-20 overflow-y-auto flex flex-wrap -z-20  h-[88vh] md:top-24">
       {" "}

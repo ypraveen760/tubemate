@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "./utils/appSlice";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { GOOGLE_API_KEY } from "./utils/constrans";
 import Shimmer from "./Shimmer";
 import ActionButtons from "./ActionButtons";
 import VideoCards from "./VideoCards";
+import WatchpageShimmer from "./WatchpageShimmer";
 
 const WatchPage = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const WatchPage = () => {
   // console.log(recommendVideos);
 
   if (!details) {
-    <Shimmer />;
+    <WatchpageShimmer />;
   }
 
   return (
@@ -78,13 +79,15 @@ const WatchPage = () => {
         <div className="overflow-y-scroll h-[94vh] no-scrollbar scroll-smooth">
           {recommendVideos.length !== 0 ? (
             recommendVideos.map((rec, index) => (
-              <VideoCards
-                info={rec}
+              <Link
+                to={"/watch?v=" + rec.id.videoId}
                 key={rec.id.videoId ? rec.id.videoId : index}
-              />
+              >
+                <VideoCards info={rec} />
+              </Link>
             ))
           ) : (
-            <Shimmer />
+            <Shimmer className="flex flex-col" />
           )}
         </div>
       </div>
