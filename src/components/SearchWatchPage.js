@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 const SearchWatchPage = () => {
   const searchkey = useSelector((store) => store.searchData);
   const keyword = searchkey.replace(/ /g, "+");
-  console.log(keyword);
 
   const [searchResult, setSearchResult] = useState([]);
 
@@ -27,7 +26,7 @@ const SearchWatchPage = () => {
 
       setSearchResult(data.items);
     } catch (err) {
-      console.error("Error Occured" + err);
+      console.error("Error Occured" + err.message);
     }
   };
 

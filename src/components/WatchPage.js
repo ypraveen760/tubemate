@@ -15,8 +15,6 @@ const WatchPage = () => {
   const [recommendVideos, setRecommendVideos] = useState([]);
 
   const videoID = searchParam.get("v");
-  // const titleData = details?.snippet?.title || " ";
-  // const title = titleData ? titleData.slice(0, 15) : "";
 
   useEffect(() => {
     if (videoID) {

@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { toggleMenu } from "./utils/appSlice";
 import { Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { YOUTUBE_SUGGESTION_API } from "./utils/constrans";
+import { PROXY_URL, YOUTUBE_SUGGESTION_API } from "./utils/constrans";
 
 import { clearData, setData } from "./utils/searchDataSlice";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -28,11 +28,13 @@ const Head = () => {
 
   const fetchSearchQuery = async () => {
     try {
-      const response = await fetch(YOUTUBE_SUGGESTION_API + searchQuery);
+      const response = await fetch(
+        PROXY_URL + YOUTUBE_SUGGESTION_API + searchQuery
+      );
       const data = await response.json();
       setSuggestion(data[1]);
     } catch (err) {
-      console.log("Error occured" + err);
+      console.log("Error occured" + err.message);
     }
   };
 
@@ -44,11 +46,9 @@ const Head = () => {
     setSearchQuery("");
   };
   const handleSuggestionClick = (item) => {
-    console.log(item);
-
     setSearchQuery(item);
+    console.log(item);
     dispatch(clearData());
-
     dispatch(setData(item));
     setShowSuggestion(false);
   };
@@ -63,9 +63,9 @@ const Head = () => {
           />{" "}
           <Link to="/">
             <img
-              className="w-36 hidden  sm:block "
+              className="w-36 hidden ml-5 sm:block "
               alt="logo"
-              src="https://images.ctfassets.net/6n252fx9hkkr/3cRehswScPb7Hu0F83FgL/5edbc5fcad04028fced5081dc42777f7/logo_YoutubePremium.webp?fm=webp&w=384&q=75"
+              src="/logo.png"
             ></img>
           </Link>
         </div>
@@ -84,7 +84,7 @@ const Head = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSuggestion(true)}
-              onBlur={() => setTimeout(() => setShowSuggestion(false), 1000)}
+              onBlur={() => setTimeout(() => setShowSuggestion(false), 500)}
             ></input>
 
             <div
@@ -104,7 +104,7 @@ const Head = () => {
               )}
             </div>
             <div
-              className="bg-gray-400 w-10 text-white text-center p-1 hover:bg-black cursor-pointer border rounded-full ml-2 font-bold"
+              className="bg-gray-400 w-10 text-white text-center p-1 hover:bg-black cursor-not-allowed border rounded-full ml-2 font-bold"
               fontSize="medium"
             >
               <MicNoneOutlinedIcon />
@@ -136,7 +136,7 @@ const Head = () => {
           </div>
         </div>
 
-        <div className=" flex text-gray-400 col-span-1 p-1 hover:text-red-600 cursor-pointer items-center">
+        <div className=" flex text-gray-400 col-span-1 p-1 hover:text-red-600 cursor-not-allowed items-center">
           <AccountCircleRoundedIcon fontSize="large" />
         </div>
       </div>
@@ -145,4 +145,3 @@ const Head = () => {
 };
 
 export default Head;
-//fixed bg-gray-200 ml-12 md:ml-32 lg:ml-48 xl:ml-96 px-4 w-5/12
