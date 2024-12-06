@@ -28,9 +28,7 @@ const Head = () => {
 
   const fetchSearchQuery = async () => {
     try {
-      const response = await fetch(
-        PROXY_URL + YOUTUBE_SUGGESTION_API + searchQuery
-      );
+      const response = await fetch(YOUTUBE_SUGGESTION_API + searchQuery);
       const data = await response.json();
       setSuggestion(data[1]);
     } catch (err) {
